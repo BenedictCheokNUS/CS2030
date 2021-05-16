@@ -1,7 +1,7 @@
 import java.util.Random;
 
 /**
- * CS2020 Lab0: RandomPoint.java
+ * CS2030S Lab0: RandomPoint.java
  * Special Term 1, 2020/21
  * @author Benedict Cheok Wei En (B03), A0199433U
  * Updated as of: 16 May 2021, 2020HRS
