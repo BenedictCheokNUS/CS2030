@@ -5,7 +5,8 @@
  * The Circle class represents a circle with a center 
  * and a radius.
  *
- * @author Benedict Cheok Wei En 
+ * @author Benedict Cheok Wei En, A0199433U
+ * Updated as of: 16 May 2021, 2020HRS
  */
 
 import java.lang.Math;

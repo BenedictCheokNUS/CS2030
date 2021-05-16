@@ -1,5 +1,7 @@
 import java.util.Random;
-
+//Author: Benedict Cheok Wei En, A0199433U
+//Updated as of: 16 May 2021, 2020HRS
+//
 //java.util.Random is a class
 //First you instantiate an object of Random class:
 //Random rng = new Random(1) <-- default seed here is 1. 

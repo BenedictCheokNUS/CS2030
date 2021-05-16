@@ -9,7 +9,8 @@ import java.util.Scanner;
  * Monte Carlo simulation with the given argument and print
  * out the estimated pi value.
  *
- * @author Benedict Cheok Wei En 
+ * @author Benedict Cheok Wei En, A0199433U 
+ * Updated as of: 16 May 2021, 2020HRS
  */
 
 class Lab0 {
@@ -50,6 +51,7 @@ class Lab0 {
         n += 1; //n plus 1 more point in the circle
       }
     }
+
     double piEst = 4 * n / numOfPoints; //Computes the estimated value of pi using 4*n/k
     return piEst; //returns the estimated value of pi
   }
