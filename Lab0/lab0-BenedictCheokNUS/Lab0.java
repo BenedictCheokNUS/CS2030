@@ -14,8 +14,6 @@ import java.util.Scanner;
 
 class Lab0 {
 
-  // TODO estimatePi(long numOfPoints, int seed) {
-  // }
   public static double estimatePi(long numOfPoints, int seed) { //numOfPoints is the number of randomly generated k points.
     double r = 0.5; //Radius of circle
     double minX = 0;
@@ -40,16 +38,12 @@ class Lab0 {
     double cy = ((maxY - minY) / 2) + minY;
     Point pc = new Point(cx, cy); //pc is the centre
     Circle c = new Circle(pc, r);
-    //Checking if Circle created properly
-    //System.out.println("Circle has been created");
-    //System.out.println(c.toString());
 
     double n = 0; //n is a counter that counts the number of points that successfully drop into the circle.
     
     RandomPoint.setSeed(seed); //set the seed first before generating the points
     
     for (int i = 0; i < numOfPoints; i++) {
-      //System.out.println("Point No: " + (i + 1));
       Point p = new RandomPoint(minX, maxX, minY, maxY); //random point generated
       //Check if point p is in the circle or not
       if (c.contains(p) == true) {
@@ -67,7 +61,7 @@ class Lab0 {
 
     double pi = estimatePi(numOfPoints, seed);
 
-    System.out.println("Estimated Value of Pi = " + pi); //remove the string portion before submission!!!!!!!!!!!
+    System.out.println(pi);    
     sc.close();
   }
 }

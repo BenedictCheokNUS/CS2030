@@ -45,26 +45,11 @@ class Circle {
     double py = p.getY();
     double dx = px - cx;
     double dy = py - cy;
-    
-    //Checking the values. Delete this later.
-    //System.out.println("=".repeat(50));
-    //System.out.println("public boolean contains (Point p)");
-    //System.out.println("-".repeat(50));
-    //System.out.println("dx: " + dx);
-    //System.out.println("dy: " + dy);
-    //System.out.println("r: " + this.r);
-    //System.out.println("dx^2: " + Math.pow(dx, 2));
-    //System.out.println("dy^2: " + Math.pow(dy, 2));
-    //System.out.println("r^2: " + Math.pow(this.r, 2));
 
     //If in circle, return true, else return false.
     if (Math.pow(dx, 2) + Math.pow(dy, 2) <= Math.pow(this.r, 2)) { //dx^2 + dy^2 <= r^2, means inside circle
-      //System.out.println("Point is in Circle. TRUE.");
-      //System.out.println("=".repeat(50));
       return true;
     } else { //dx^2 + dy^2 > r^2, means outside of circle
-      //System.out.println("Point is NOT in circle. FALSE.");
-      //System.out.println("=".repeat(50));
       return false;
     } 
   }
