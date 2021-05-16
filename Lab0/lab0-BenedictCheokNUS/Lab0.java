@@ -9,7 +9,7 @@ import java.util.Scanner;
  * Monte Carlo simulation with the given argument and print
  * out the estimated pi value.
  *
- * @author Benedict Cheok Wei En, A0199433U 
+ * @author Benedict Cheok Wei En (B03), A0199433U 
  * Updated as of: 16 May 2021, 2020HRS
  */
 

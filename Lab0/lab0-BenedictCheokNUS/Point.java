@@ -4,7 +4,7 @@
  *
  * The Point class encapsulates a point on a 2D plane.
  *
- * @author Benedict Cheok Wei En, A0199433U
+ * @author Benedict Cheok Wei En (B03), A0199433U
  * Updated as of: 16 May 2021, 2020HRS
  */
 class Point {
