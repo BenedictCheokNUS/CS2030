@@ -3,7 +3,7 @@
  * simulation.  Your task is to replace this
  * class with new classes, following proper OOP principles.
  *
- * @author Wei Tsang
+ * @author Benedict Cheok Wei En (B03), A0199433U
  * @version CS2030 AY20/21 ST1
  */
 class ShopEvent extends Event {

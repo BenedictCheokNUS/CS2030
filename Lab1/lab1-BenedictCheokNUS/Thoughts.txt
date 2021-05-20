@@ -1,0 +1,17 @@
+Thought flow about the entire shop simulation process.
+---------------------------------------------------------------------------------------------------
+File Name: ShopSimulation.java
+Description: 
+ShopSimulation.java is in charge of:
+First --> Initialising the Shop (Open Shop) by telling the shop owner (Shop)...
+    1. Number of Counters to Set Up.
+    2. Number of Customers for that day (or that run)
+    3. Arrival Time of the customers
+    4. Service Time needed for each customer
+    
+    The Shop will prepare the counters and "arrange the timing" with the customers.
+    i.e. the Shop will initialise the customers.
+    The Shop Owner will then return the list of available counters --> {true, true, true, false}
+    
+Second --> Prepare the list of initial events that will occur (all the arrival events). 
+
