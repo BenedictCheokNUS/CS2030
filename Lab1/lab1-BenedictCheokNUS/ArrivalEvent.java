@@ -8,42 +8,34 @@
  */
 class ArrivalEvent extends Event {
 
-  //ATTRIBUTES
-
+  /**ATTRIBUTES*/
+  
+  //This is the shop.
+  private Shop shop;
   //This is the customer for the arrival event
   private Customer cust;
-
   //This is the list of counters in the shop  
   private Counter[] counters; //The list of counters in the shop for the SERVICE_...portion.
 
-  /**
-   * An array to indicate if a service counter is
-   * available.  available[i] is true if and only
-   * if service counter i is available to serve.
-   */
-  private boolean[] available;
-
-  //CONSTRUCTOR METHOD
-
+  /**CONSTRUCTOR METHOD*/
   /**
    * Constructor for Arrival event.
    *
    * @param time        The time associated with this event (the arrival time of customer).
+   * @param shop        The shop.
    * @param cust        The customer object associated with this event.
    * @param counters    The array of counter objects in the shop.
-   * @param available   The indicator of which counter is
-   *                    available.
-   * @param arrivalTime The arrival time of the customer obtained from the customer object. This is to be passed to the super class.
+   *
    */
-  public ArrivalEvent(Customer cust, Counter[] counters, boolean[] available) {
-    super(cust.getArrTime());
 
+  public ArrivalEvent(Customer cust, Shop shop) {
+    super(cust.getArrTime());
+    this.shop = shop; //type Shop
     this.cust = cust; //type Customer
-    this.counters = counters; //type Counter array
-    this.available = available; //type boolean
+    this.counters = this.shop.getCounterList(); //type Counter array
   }
   
-  //METHODS
+  /**METHODS*/
   /**
    * Returns the string representation of the arrival event,
    * depending on the type of event.
@@ -53,7 +45,7 @@ class ArrivalEvent extends Event {
   @Override
   public String toString() {
     String str = "";
-    str = String.format(": Customer %d arrives", this.cust.getCustID()); //get the customer's ID and return it.   
+    str = String.format(": %s arrives", this.cust); //get the customer's ID and return it.   
     return super.toString() + str;
   }
 
@@ -68,18 +60,18 @@ class ArrivalEvent extends Event {
  
     int counterNo = -1;
     //for loop to find an available counter for the customer.
-    for (int i = 0; i < this.available.length; i++) {
-      if (this.available[i]) {
+    for (int i = 0; i < this.counters.length; i++) {
+      if (this.counters[i].getAvail()) {
         counterNo = i;
         break;
       }
     }
 
     if(counterNo == -1) { //no free counters
-      Event custDepart = new DepartureEvent(this.cust); //Handover customer to the departure usher.
+      Event custDepart = new DepartureEvent(this.cust, this.shop); //Handover to departure
       return new Event[] {custDepart};
-    } else { //got counter. Start ServiceBeginEvent by handing over the customer to the specific service counter
-      Event serveCust = new ServiceBeginEvent(this.cust, this.counters[counterNo], this.available);
+    } else { //got counter.
+      Event serveCust = new ServiceBeginEvent(this.cust, this.counters[counterNo], this.shop);
       return new Event[] {serveCust};
     }
   }   

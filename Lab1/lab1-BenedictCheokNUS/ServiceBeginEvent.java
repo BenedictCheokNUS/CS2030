@@ -8,21 +8,16 @@
  */
 class ServiceBeginEvent extends Event {
   
-  //ATTRIBUTES
+  /**ATTRIBUTES*/
   
+  // This is the shop
+  private Shop shop;
   // This is the customer for the service event
   private Customer cust;
   // This is the counter associated with the service
   private Counter counter;
-
-  /**
-   * An array to indicate if a service counter is
-   * available.  available[i] is true if and only
-   * if service counter i is available to serve.
-   */
-  private boolean[] available;
-  
-  //CONSTRUCTOR METHOD
+ 
+  /**CONSTRUCTOR METHOD*/
   /**
    * Constructor for a ServiceBeginEvent.
    *
@@ -31,17 +26,16 @@ class ServiceBeginEvent extends Event {
    *                    event
    * @param counter     The counter associated with this 
    *                    event.
-   * @param available   The indicator of which counter is
-   *                    available.
+   *
    */
-  public ServiceBeginEvent(Customer cust, Counter counter, boolean[] available) {
+  public ServiceBeginEvent(Customer cust, Counter counter, Shop shop) {
     super(cust.getCurrTime());
+    this.shop = shop; //type Shop
     this.cust = cust; //type Customer
     this.counter = counter; //type Counter
-    this.available = available; //type boolean[]
   }
 
-  //METHODS
+  /**METHODS*/
   /**
    * Returns the string representation of the event,
    * depending on the type of event.
@@ -51,7 +45,7 @@ class ServiceBeginEvent extends Event {
   @Override
   public String toString() {
     String str = "";
-    str = String.format(": Customer %d service begin (by Counter %d)", this.cust.getCustID(), this.counter.getCounterID());
+    str = String.format(": %s service begin (by %s)", this.cust, this.counter);
     return super.toString() + str;
   }
 
@@ -68,12 +62,11 @@ class ServiceBeginEvent extends Event {
     //a service-end event at the current time + service time.
     int currCounterID = counter.getCounterID();
     double serviceTime = cust.getServTime();
-    this.available[currCounterID] = false;
     this.counter.setAvail(false); //set the availability of the counter to false
     double endTime = this.cust.getCurrTime() + serviceTime;
     this.cust.setCurrTime(endTime);
-    Event serveEnd = new ServiceEndEvent(this.cust, this.counter, this.available);
+    this.cust.setAssCounter(currCounterID);
+    Event serveEnd = new ServiceEndEvent(this.cust, this.counter, this.shop);
     return new Event[] {serveEnd};
-
   }
 }

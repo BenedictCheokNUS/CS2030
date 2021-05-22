@@ -8,24 +8,27 @@
  */
 class DepartureEvent extends Event {
   
-  //ATTRIBUTES
-
+  /**ATTRIBUTES*/
+  
+  private Shop shop;
   private Customer cust;
   
-  //CONSTRUCTOR METHOD
+  /**CONSTRUCTOR METHOD*/
   /**
    * Constructor for DepartureEvent.
    *
    * @param time       The time this event occurs.
    * @param cust       The customer associated with this
    *                   event.
+   * @param shop       The shop.
    */
-  public DepartureEvent(Customer cust) {
+  public DepartureEvent(Customer cust, Shop shop) {
     super(cust.getCurrTime());
     this.cust = cust;
+    this.shop = shop;
   }
 
-  //METHODS
+  /**METHODS*/
   /**
    * Returns the string representation of the event,
    * depending on the type of event.
@@ -35,7 +38,7 @@ class DepartureEvent extends Event {
   @Override
   public String toString() {
     String str = "";
-    str = String.format(": Customer %d departed", this.cust.getCustID());
+    str = String.format(": %s departed", this.cust);
     return super.toString() + str;
   }
 

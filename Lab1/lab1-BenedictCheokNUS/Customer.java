@@ -3,30 +3,31 @@
  * Lab 1: Simulation 1
  * File: Customer.java
  * Description: This file contains the Customer class
- * Attributes of Customer class: custID, custTime, arrTime, servTime
- * Methods of Customer class: Customer (Constructor), getCustID, getArrTime, getServTime
+ * Attributes of Customer class: custID, custTime, currTime, assignedCounterID
+ * Methods of Customer class: Customer (Constructor), getCustID, getArrTime, getServTime, getCurrTime(), setCurrTime(), getAssCounter(), setAssCounter(),
  * @author Benedict Cheok Wei En (B03), A0199433U
  */
-
-
-
-
 public class Customer {
   
-  //ATTRIBUTES
+  /**ATTRIBUTES*/
+
   private int custID;
   private double[] custTime;
   private double currTime = 0;
+  private int assignedCounterID = -1;
 
-  //CONSTRUCTOR METHOD
-  //Constructor will take in the Customer ID (called custID) and the array {Arrival Time, Service Time} (called custTime)
+  /**CONSTRUCTOR METHOD*/
+  
+  //Constructor will take in the Customer ID (called custID) and 
+  //the array {Arrival Time, Service Time} (called custTime)
   public Customer(int custID, double[] custTime) {
     this.custID = custID;
     this.custTime = custTime;
     this.currTime = custTime[0]; //Initialise current time as the arrival time.
   }
 
-  //ACCESSOR METHODS
+  /**ACCESSOR METHODS*/
+  
   public int getCustID() {
     return this.custID;
   }
@@ -43,9 +44,24 @@ public class Customer {
     return this.currTime;
   }
 
-  //Modifier Methods
+  public int getAssCounter() {
+    return this.assignedCounterID;
+  }
+
+  /**MODIFIER METHODS*/
+  
   public void setCurrTime(double newTime) {
     this.currTime = newTime;
   }
 
+  public void setAssCounter(int newCounterID) {
+    this.assignedCounterID = newCounterID;
+  }
+  
+  /**toString METHOD*/
+  @Override
+  public String toString() {
+    String str = "Customer " + this.custID;
+    return str;
+  }
 }
