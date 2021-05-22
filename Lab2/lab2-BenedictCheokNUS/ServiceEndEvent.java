@@ -8,37 +8,31 @@
  */
 class ServiceEndEvent extends Event {
   
-  //ATTRIBUTES
-   
+  /**ATTRIBUTES*/
+  private Shop shop;
   private Customer cust;
   private Counter counter; 
-  /**
-   * An array to indicate if a service counter is
-   * available.  available[i] is true if and only
-   * if service counter i is available to serve.
-   */
-  private boolean[] available;
-
-  //CONSTRUCTOR METHOD
+  
+  /**CONSTRUCTOR METHOD*/
   /**
    * Constructor for ServiceEnd event.
    *
    * @param time        The time this event occurs.
+   * @param shop        The shop
    * @param cust        The customer associated with this
    *                    event.
    * @param counter     The counter associated with
    *                    this event.
-   * @param available   The indicator of which counter is
-   *                    available.
+   *
    */
-  public ServiceEndEvent(Customer cust, Counter counter, boolean[] available) {
+  public ServiceEndEvent(Customer cust, Counter counter, Shop shop) {
     super(cust.getCurrTime());
+    this.shop = shop;
     this.cust = cust;
     this.counter = counter;
-    this.available = available;
   }
 
-  //METHODS
+  /**METHODS*/
 
   /**
    * Returns the string representation of the event,
@@ -49,7 +43,7 @@ class ServiceEndEvent extends Event {
   @Override
   public String toString() {
     String str = "";
-    str = String.format(": Customer %d service done (by Counter %d)", this.cust.getCustID(), this.counter.getCounterID());
+    str = String.format(": %s service done (by %s)", this.cust, this.counter);
     return super.toString() + str;
   }
 
@@ -65,10 +59,8 @@ class ServiceEndEvent extends Event {
     // Mark the counter as available, then schedule
     // a departure event at the current time.
     int currCounterID = this.counter.getCounterID();
-    this.available[currCounterID] = true;
     this.counter.setAvail(true);
-    Event depart = new DepartureEvent(this.cust);
+    Event depart = new DepartureEvent(this.cust, this.shop);
     return new Event[] {depart};
-
   }
 }

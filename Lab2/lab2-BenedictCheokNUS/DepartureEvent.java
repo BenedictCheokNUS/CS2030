@@ -8,24 +8,31 @@
  */
 class DepartureEvent extends Event {
   
-  //ATTRIBUTES
+  /**ATTRIBUTES*/
 
+  private Shop shop;
   private Customer cust;
+  private Queue shopQueue;
   
-  //CONSTRUCTOR METHOD
+  /**CONSTRUCTOR METHOD*/
   /**
    * Constructor for DepartureEvent.
    *
    * @param time       The time this event occurs.
+   * @param shop       The shop
    * @param cust       The customer associated with this
    *                   event.
+   * @param shopQueue  The queue for the shop.
    */
-  public DepartureEvent(Customer cust) {
+  public DepartureEvent(Customer cust, Shop shop) {
     super(cust.getCurrTime());
+    this.shop = shop;
     this.cust = cust;
+    this.shopQueue = this.shop.getQueue();
   }
 
-  //METHODS
+  /**METHODS*/
+
   /**
    * Returns the string representation of the event,
    * depending on the type of event.
@@ -35,7 +42,7 @@ class DepartureEvent extends Event {
   @Override
   public String toString() {
     String str = "";
-    str = String.format(": Customer %d departed", this.cust.getCustID());
+    str = String.format(": %s departed", this.cust);
     return super.toString() + str;
   }
 
@@ -47,6 +54,27 @@ class DepartureEvent extends Event {
    */
   @Override
   public Event[] simulate() {
-  return new Event[] {};
-  } 
+    if (this.cust.getAssCounter() > -1) { //Customer has been served by one of the counters
+      return this.nextCustomer();  
+    } else { //Customer departs due to a full queue. not served at all
+      return new Event[] {};
+    }
+  }
+  
+  /**
+   * @return Event[] with appropriate Event depending on if queue is empty
+   * 
+   */
+  private Event[] nextCustomer() {  
+    int availCounterID = this.cust.getAssCounter(); //counter now empty as the customer just left.
+    if (shopQueue.isEmpty() == false) { //there are customers waiting to be served...
+      Customer nextCustomer = (Customer) this.shopQueue.deq();
+      nextCustomer.setCurrTime(this.getTime());
+      Counter[] counterList = this.shop.getCounterList();
+      Event serveCust = new ServiceBeginEvent(nextCustomer, counterList[availCounterID], this.shop);
+      return new Event[] {serveCust};
+    } else { //queue is empty le. no more customers to serve.
+      return new Event[] {};
+    }
+  }
 }

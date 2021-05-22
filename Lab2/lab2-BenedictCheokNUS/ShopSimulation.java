@@ -8,24 +8,23 @@ import java.util.Scanner;
  */
 class ShopSimulation extends Simulation {
   
-  //ATTRIBUTES/FIELDS
+  /**ATTRIBUTES*/
 
   /** 
    * The list of customer arrival events to populate
    * the simulation with.
    */
   private Event[] initEvents;
-  
   // The number of customers
   private int numOfCustomers = 0;
-  
   // The number of counters
   private int numOfCounters = 0;
-  
+  // The length of queue
+  private int queueLen = 0;
   // 2D Array to store customer arrival and service times.
   private double[][] custTimeL;
   
-  //CONSTRUCTOR METHOD
+  /**CONSTRUCTOR METHOD*/
   /** 
    * Constructor for a shop simulation. 
    *
@@ -38,15 +37,17 @@ class ShopSimulation extends Simulation {
   public ShopSimulation(Scanner sc) {
     this.numOfCustomers = sc.nextInt();
     this.numOfCounters = sc.nextInt();
+    this.queueLen = sc.nextInt(); //Length of Queue
     //Create customer timings
-    this.custTimeL = createCustTimeL(sc, this.numOfCustomers);  
+    this.custTimeL = createCustTimeL(sc, this.numOfCustomers);
     //Initialise new shop
-    Shop newShop = new Shop(this.numOfCustomers, this.numOfCounters, this.custTimeL);
+    Shop newShop = new Shop(this.numOfCustomers, this.numOfCounters, this.custTimeL, this.queueLen);
     //Initialise initial events
     this.initEvents = createEvents(newShop);
   }
 
-  //METHODS
+  /**METHODS*/
+
   public double[][] createCustTimeL(Scanner sc, int numOfCustomers) {
     double[][] tempTimeL = new double[numOfCustomers][2];
     
@@ -65,17 +66,17 @@ class ShopSimulation extends Simulation {
     //Get list of customers
     //For each customer in customer list, get arrival time, customer ID, service time
     Customer[] custList = newShop.getCustomerList();
-    Counter[] counterList = newShop.getCounterList();
-    boolean[] available = newShop.getAvailCounters();
     Event[] tempinitEvents = new Event[custList.length];
-    for (Customer cust : custList) { //for each customer that comes (or will come), host them by initialising an "arrival usher"
+    for (Customer cust : custList) { 
+      //for each customer that comes (or will come), host them by initialising an "arrival usher"
       int custID = cust.getCustID();
-      tempinitEvents[custID] = new ArrivalEvent(cust, counterList, available); //Handover customer to the "arrival usher" who will find for a counter for the customer.
+      //Handover cutomer to "arrival usher" who will find a counter for cust.
+      tempinitEvents[custID] = new ArrivalEvent(cust, newShop);
     }
     return tempinitEvents;  
   }
 
-  //ACCESSOR METHODS
+  /**ACCESSOR METHODS*/
   /**
    * Retrieve an array of events to populate the 
    * simulator with.
