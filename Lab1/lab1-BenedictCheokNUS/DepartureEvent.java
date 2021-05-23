@@ -50,6 +50,6 @@ class DepartureEvent extends Event {
    */
   @Override
   public Event[] simulate() {
-  return new Event[] {};
+    return new Event[] {};
   } 
 }

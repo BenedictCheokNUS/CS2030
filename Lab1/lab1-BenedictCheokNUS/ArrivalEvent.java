@@ -67,7 +67,7 @@ class ArrivalEvent extends Event {
       }
     }
 
-    if(counterNo == -1) { //no free counters
+    if (counterNo == -1) { //no free counters
       Event custDepart = new DepartureEvent(this.cust, this.shop); //Handover to departure
       return new Event[] {custDepart};
     } else { //got counter.

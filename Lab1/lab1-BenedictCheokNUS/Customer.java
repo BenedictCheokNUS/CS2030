@@ -4,7 +4,8 @@
  * File: Customer.java
  * Description: This file contains the Customer class
  * Attributes of Customer class: custID, custTime, currTime, assignedCounterID
- * Methods of Customer class: Customer (Constructor), getCustID, getArrTime, getServTime, getCurrTime(), setCurrTime(), getAssCounter(), setAssCounter(),
+ * Methods of Customer class: Customer (Constructor), getCustID, getArrTime, getServTime, 
+ * getCurrTime(), setCurrTime, getAssCounter, setAssCounter, toString
  * @author Benedict Cheok Wei En (B03), A0199433U
  */
 public class Customer {
