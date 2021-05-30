@@ -53,7 +53,7 @@ class DepartureEvent extends Event {
   public Event[] simulate() {
     if (this.cust.getAssCounter() > -1) { //Customer has been served by one of the counters
       return this.nextCustomer();  
-    } else { //Customer departs due to a full queue. not served at all
+    } else { //Customer departs due to a full shop queue. not served at all
       return new Event[] {};
     }
   }
@@ -63,15 +63,34 @@ class DepartureEvent extends Event {
    * 
    */
   private Event[] nextCustomer() {
-    int availCounterID = this.cust.getAssCounter(); //counter now empty as the customer just left.
-    if (this.shop.isQueueEmpty() == false) { //there are customers waiting to be served...
-      Customer nextCustomer = this.shop.nextCustomerPls(); //the next customer in queue
-      nextCustomer.setCurrTime(this.getTime());
-      Counter freeCounter = this.shop.getThatCounter(availCounterID);
-      Event serveCust = new ServiceBeginEvent(nextCustomer, freeCounter, this.shop);
-      return new Event[] {serveCust};
-    } else { //queue is empty le. no more customers to serve.
-      return new Event[] {};
+    int availCounterID = this.cust.getAssCounter(); //counter now empty as customer just left.
+    Counter availCounter = this.shop.getThatCounter(availCounterID);
+    
+    if (availCounter.getCounterQsize() == 0) { //counter no queue
+      if (this.shop.isQueueEmpty() == false) { //Entrance queue got ppl
+        Customer nextCustomer = this.shop.nextCustomerPls();
+        nextCustomer.setCurrTime(this.getTime());
+        Event serveCust = new ServiceBeginEvent(nextCustomer, availCounter, this.shop);
+        return new Event[] {serveCust};
+      } else { //Shop entrance queue is empty. no more customer
+        return new Event[] {};
+      }
+    } else { //counter queue max length not equals 0
+      if (availCounter.isQueueEmpty() == false) { //there is someone waiting at counter queue
+        Customer nextCounterCust = availCounter.counterNextCustomer(); 
+        nextCounterCust.setCurrTime(this.getTime());
+        Event serveCounterCust = new ServiceBeginEvent(nextCounterCust, availCounter, this.shop);
+        if (this.shop.isQueueEmpty() == false) { //shop entrance queue got people.
+          Customer nextToCounterQ = this.shop.nextCustomerPls();
+          nextToCounterQ.setCurrTime(this.getTime());
+          Event joinCounterQ = new JoinCounterQEvent(nextToCounterQ, availCounter);
+          return new Event[] {joinCounterQ, serveCounterCust};
+        } else { //shop entrance queue is empty
+          return new Event[] {serveCounterCust};
+        }
+      } else { //Counter queue empty. No more customers
+        return new Event[] {};
+      }
     }
   }
 }

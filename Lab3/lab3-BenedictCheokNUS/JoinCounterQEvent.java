@@ -1,20 +1,21 @@
 /**
- * This class encapsulates QueueEvent in the shop
- * simulation. QueueEvent puts the customer into the queue.
+ * This class encapsulates JoinCounterQEvent in the shop
+ * simulation. JoinCounterQEvent puts the customer into the 
+ * counter queue.
  * Your task is to replace this class with new classes, 
  * following proper OOP principles.
  *
  * @author Benedict Cheok Wei En (B03), A0199433U
  * @version CS2030 AY20/21 ST1
  */
-class QueueEvent extends Event {
+class JoinCounterQEvent extends Event {
   
   /**ATTRIBUTES*/
 
-  //The Shop
-  private Shop shop;
   //The customer to be added into the queue. 
   private Customer cust;
+  //The counter which the customer is going to queue for.
+  private Counter qAtCounter;
   
   /**CONSTRUCTOR METHOD*/
   /**
@@ -23,12 +24,13 @@ class QueueEvent extends Event {
    * @param time        The time this event occurs.
    * @param cust        The customer associated with this
    *                    event.
-   * @param shop        The shop.
+   * @param qAtCounter  The counter which the customer would
+   *                    queue up for
    */
-  public QueueEvent(Customer cust, Shop shop) {
+  public JoinCounterQEvent(Customer cust, Counter qAtCounter) {
     super(cust.getCurrTime());
     this.cust = cust;
-    this.shop = shop;
+    this.qAtCounter = qAtCounter; //type Counter
   }
   
   /**METHODS*/  
@@ -41,7 +43,7 @@ class QueueEvent extends Event {
   @Override
   public String toString() {
     String str = "";
-    str = String.format(": %s joined shop queue %s", this.cust, this.shop.getQueue()); 
+    str = String.format(": %s joined counter queue (at %s)", this.cust, this.qAtCounter); 
     return super.toString() + str;
   }
 
@@ -53,7 +55,7 @@ class QueueEvent extends Event {
    */
   @Override
   public Event[] simulate() {
-    this.shop.custInQueue(this.cust); //simply, this.cust enters queue.
+    this.qAtCounter.counterQueueJoin(this.cust); //simply, this.cust enters queue.
     return new Event[] {};
   }
 }

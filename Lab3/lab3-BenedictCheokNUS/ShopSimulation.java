@@ -29,11 +29,12 @@ class ShopSimulation extends Simulation {
   public ShopSimulation(Scanner sc) {
     int numOfCustomers = sc.nextInt();
     int numOfCounters = sc.nextInt();
+    int counterQueueLen = sc.nextInt(); //Length of Counter Queue
     int queueLen = sc.nextInt(); //Length of Queue
     //Create customer timings
     double[][] custTimeL = createCustTimeL(sc, numOfCustomers);
     //Initialise new shop
-    Shop newShop = new Shop(numOfCustomers, numOfCounters, custTimeL, queueLen);
+    Shop newShop = new Shop(numOfCustomers, numOfCounters, custTimeL, queueLen, counterQueueLen);
     //Initialise initial events
     this.initEvents = createEvents(newShop);
   }

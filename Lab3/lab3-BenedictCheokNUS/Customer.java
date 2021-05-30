@@ -1,6 +1,6 @@
 /**
  * CS2030 2020/21 ST1
- * Lab 2: Simulation 2
+ * Lab 3: Simulation 3
  * File: Customer.java
  * Description: This file contains the Customer class
  * Attributes of Customer class: custID, custTime, currTime, assignedCounterID

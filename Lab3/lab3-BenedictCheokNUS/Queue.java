@@ -1,14 +1,14 @@
 /**
- * The Queue class implements a simple FIFO data structure
+ * The Queue Generic Class implements a simple FIFO data structure
  * with limited capacity that can store any Object instances.
  * Not to be confused with java.util.Queue.
  *
  * @author Benedict Cheok Wei En (B03), A0199433U
  * @version CS2030 AY20/21 ST1
  */
-class Queue {
+class Queue<T> {
   /** An array to store the items in the queue. */
-  private Object[] items;
+  private T[] items;
 
   /** Index of the first element in the queue. */
   private int first;
@@ -29,19 +29,24 @@ class Queue {
    */
   public Queue(int size) {
     this.maxSize = size;
-    this.items = new Object[size];
+    // The only way to put an object into this array is through
+    // method enq(), which only takes in a parameter of type T as argument.
+    // Therefore, it is safe to cast 'Object[]' to 'T[]'.
+    @SuppressWarnings("unchecked")
+    T[] newItems = (T[]) new Object[size]; //SuppressWarnings only for declaration, not assignment.
+    this.items = newItems;
     this.first = -1;
     this.last = -1;
     this.len = 0;
   }
 
   /**
-   * Add the object e into the queue.
+   * Add the e of type T into the queue.
    *
    * @param e The item to put in the queue.
    * @return false if the queue is full; true if e is added successfully.
    */
-  public boolean enq(Object e) {
+  public boolean enq(T e) {
     if (this.isFull()) {
       return false;
     }
@@ -57,15 +62,15 @@ class Queue {
   }
 
   /**
-   * Remove the object from the queue.
+   * Remove the smth of type T from the queue.
    *
    * @return null if the queue is empty; the object removed from the queue otherwise.
    */
-  public Object deq() {
+  public T deq() {
     if (this.isEmpty()) {
       return null;
     }
-    Object item = this.items[this.first];
+    T item = this.items[this.first];
     this.first = (this.first + 1) % this.maxSize;
     this.len -= 1;
     return item;
