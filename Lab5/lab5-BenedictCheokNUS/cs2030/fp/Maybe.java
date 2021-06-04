@@ -6,16 +6,10 @@
  *  might be missing
  *  It represents either some value, or none
  *  Maybe<T> is an abstract class
- *  It has 2 Concrete Static Nested Classes: None, Some<T>
- *  Both None and Some<T> inherits from Maybe<T>
- *  Some<T> is immutable
- *  Maybe<T> has 2 Static Factory Methods: none(), some(T t)
- *  none(): returns an instance of None just like Box::empty
- *  There should only be one instance of None
- *  some(T t): takes in value t and returns instance of Some<T> wrapped around t
- *  t might be null
- *  None::toString returns "[]"
- *  Some::toString returns "[" + value + "]"
+ *  Attributes: NONE
+ *  Nested Classes: None, Some<T>
+ *  Factory Methods: none(), some(), of()
+ *  Other Methods: protected get(), filter(), map(), flatMap(), orElse(), orElseGet()
  *
  *  @author Benedict Cheok Wei En (B03), A0199433U
  */
@@ -80,6 +74,16 @@ public abstract class Maybe<T> {
     protected T get() {
       return this.content;
     }
+    
+    @Override
+    public <U extends T> T orElse(U value) {
+      return this.content;
+    }
+
+    @Override 
+    public <U extends T> T orElseGet(Producer<U> producer) {
+      return this.content;
+    }
   }
 
   private static final class None extends Maybe<Object> {
@@ -117,10 +121,18 @@ public abstract class Maybe<T> {
     protected Exception get() throws NoSuchElementException {
       throw new NoSuchElementException();
     }
+
+    @Override
+    public <U> U orElse(U value) {
+      return value;
+    }
+
+    @Override
+    public <U> U orElseGet(Producer<U> producer) {
+      return producer.produce();
+    }
   }
  
-  /**CONSTRUCTOR METHODS*/
-
   /**FACTORY METHODS*/
   public static <N> Maybe<N> none() {
     //method none() is like Box::empty method. 
@@ -180,11 +192,24 @@ public abstract class Maybe<T> {
     }
   }
 
-  //public <U> Maybe<U> flatMap(Transformer<? super T, ? extends Maybe<? extends U>> trans) {
-  //  if (this instanceof None) {
-  //    return none();
-  //  } else { // this is instance of Some
-  //    
-  //  }
-  //}
+  public <U> Maybe<U> flatMap(Transformer<? super T, ? extends Maybe<? extends U>> trans) {
+    //trans.transform() returns a Maybe<> object for wordToMaybeInt alr
+    //flatMap should only be used for wordToMaybeInt
+if (this instanceof None) {
+      return none();
+    } else { // this is instance of Some
+      //return trans.transform(this.get());
+      //We know that map() function returns a Maybe<Maybe<U>> object for wordToMaybeInt
+      //Therefore, .get() would return a Maybe<U> object
+      //As such, it is safe to suppress warning
+
+      @SuppressWarnings("unchecked")
+      Maybe<U> transMayb = (Maybe<U>) this.map(trans).get();
+      return transMayb;
+    }
+  }
+
+  public abstract <U extends T> T orElse(U valuElse);
+
+  public abstract <U extends T> T orElseGet(Producer<U> producer);
 }
