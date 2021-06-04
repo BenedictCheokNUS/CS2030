@@ -195,7 +195,7 @@ public abstract class Maybe<T> {
   public <U> Maybe<U> flatMap(Transformer<? super T, ? extends Maybe<? extends U>> trans) {
     //trans.transform() returns a Maybe<> object for wordToMaybeInt alr
     //flatMap should only be used for wordToMaybeInt
-if (this instanceof None) {
+    if (this instanceof None) {
       return none();
     } else { // this is instance of Some
       //return trans.transform(this.get());
