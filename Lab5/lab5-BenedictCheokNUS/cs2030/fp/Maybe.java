@@ -53,7 +53,7 @@ public abstract class Maybe<T> {
       //    return this.content.equals(object.content)
       //else (object is not instance of Some)
       //  return false
-      
+
       if (s instanceof Some) {
         //We have checked if s is of type Some
         //Therefore it is safe to cast s into an object Some with param T
@@ -66,13 +66,42 @@ public abstract class Maybe<T> {
         }
       } else { //s is not instance of Some
         return false;
-      }
+      } 
     }
 
     //OTHER METHODS for class Some
     @Override
     protected T get() {
       return this.content;
+    }
+
+    @Override
+    public Maybe<T> filter(BooleanCondition<? super T> testCond) {
+      if ((this.get() != null) && (testCond.test(this.get()) == false)) {
+        return none();
+      } else { //content == null OR testCond.test(this.content) TRUE by De Morgan's Law
+        return this;
+      }
+    }
+
+    @Override
+    public <U> Maybe<U> map(Transformer<? super T, ? extends U> trans) {
+      return some(trans.transform(this.get()));
+    }
+
+    @Override
+    public <U> Maybe<U> flatMap(Transformer<? super T, ? extends Maybe<? extends U>> trans) {
+      //trans.transform() returns a Maybe<> object for U to Maybe<U> (like wordToMaybeInt)
+      //flatMap should only be used for wordToMaybeInt kind of transformation
+      //When this flatMap() is called, this is an instance of Some
+      //return trans.transform(this.get());
+      
+      //We know that map() function returns a Maybe<Maybe<U>> object for wordToMaybeInt
+      //As such it is safe to suppress warning
+      
+      @SuppressWarnings("unchecked")
+      Maybe<U> transMayb = (Maybe<U>) this.map(trans).get();
+      return transMayb;
     }
     
     @Override
@@ -108,18 +137,34 @@ public abstract class Maybe<T> {
       //  return true
       //else (Not instance of None)
       //  return false
-
+      
       if (n instanceof None) {
         return true;
       } else { //Not None object
         return false;
       }
     }
-
+      
     //OTHER METHODS for class None
     @Override
     protected Exception get() throws NoSuchElementException {
       throw new NoSuchElementException();
+    }
+    
+    @Override
+    public Maybe<Object> filter(BooleanCondition<Object> testCond) {
+      return this;
+    }
+
+    @Override
+    public <U> Maybe<U> map(Transformer<Object,? extends U> trans) {
+      return none(); //returns back None object
+    }
+
+    @Override
+    public <U> Maybe<U> flatMap(Transformer<Object, ? extends Maybe<? extends U>> trans) {
+      //flatMap should only be used for wordToMaybeInt kind of transformation
+      return none();
     }
 
     @Override
@@ -167,48 +212,12 @@ public abstract class Maybe<T> {
   /**OTHER METHODS*/
   protected abstract T get();  
   
-  public Maybe<T> filter(BooleanCondition<? super T> testCond) {
-    if (this instanceof None) {
-      return this;
-    } else { //Not instanceof None --> instance of Some
-      //if content in Some != null AND testCond.test(content) FAIL
-      //  return None
-      //else (content == null OR testCond.test(content) PASS) by De Morgan's Law
-      if ((this.get() != null) && (testCond.test(this.get()) == false)) {
-        return none();
-      } else { //content == null OR testCond.test(this.content) TRUE by De Morg
-        return this;
-      }
-    }
-  }
+  public abstract Maybe<T> filter(BooleanCondition<? super T> testCond);
 
-  public <U> Maybe<U> map(Transformer<? super T, ? extends U> trans) {
-    if (this instanceof None) {
-      return none();
-    } else { //this instance of Some
-      return some(trans.transform(this.get()));
-      //trans.transform(this.get()) returns the new input of some type U
-      //some(U thingy) takes in the new input and returns the new Maybe<U>
-    }
-  }
-
-  public <U> Maybe<U> flatMap(Transformer<? super T, ? extends Maybe<? extends U>> trans) {
-    //trans.transform() returns a Maybe<> object for wordToMaybeInt alr
-    //flatMap should only be used for wordToMaybeInt
-    if (this instanceof None) {
-      return none();
-    } else { // this is instance of Some
-      //return trans.transform(this.get());
-      //We know that map() function returns a Maybe<Maybe<U>> object for wordToMaybeInt
-      //Therefore, .get() would return a Maybe<U> object
-      //As such, it is safe to suppress warning
-
-      @SuppressWarnings("unchecked")
-      Maybe<U> transMayb = (Maybe<U>) this.map(trans).get();
-      return transMayb;
-    }
-  }
-
+  public abstract <U> Maybe<U> map(Transformer<? super T, ? extends U> trans);
+  
+  public abstract <U> Maybe<U> flatMap(Transformer<? super T, ? extends Maybe<? extends U>> trans);
+  
   public abstract <U extends T> T orElse(U valuElse);
 
   public abstract <U extends T> T orElseGet(Producer<U> producer);
