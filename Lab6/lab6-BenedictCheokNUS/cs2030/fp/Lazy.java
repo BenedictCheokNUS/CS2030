@@ -32,7 +32,7 @@ public class Lazy<T> {
   
   private Lazy(T value) {
     //Only for the value
-    this.value = Maybe.<T>of(value);
+    this.value = Maybe.some(value);
   }
 
   private Lazy(Producer<T> s) {
@@ -55,14 +55,19 @@ public class Lazy<T> {
   }
 
   //METHODS
+  
   public T get() {
-    this.value = Maybe.<T>of(this.value.<T>orElseGet(this.producer));
-    //but how then do we update the value field?
+    this.value = Maybe.of(this.value.<T>orElseGet(this.producer));
     return this.value.orElse(null);
   }
   
   @Override
-  public String toString() {
-    return this.value.orElse("?");
+  public String toString() {    
+    return this.value.map(String::valueOf).orElse("?");
+  }
+
+  public <U> Lazy<U> map(Transformer<? super T, ? extends U> trans) {
+    Producer<U> newProduce = () -> trans.transform(this.get());
+    return Lazy.<U>of(newProduce);
   }
 }
