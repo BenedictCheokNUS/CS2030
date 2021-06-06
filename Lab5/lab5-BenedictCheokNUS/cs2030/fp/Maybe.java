@@ -2,12 +2,12 @@
  *  CS2030 2020/21 ST1
  *  Lab 5: Maybe
  *  File Name: Maybe.java
- *  Description: Maybe<T> is an option type, which is a wrapper around a value that
+ *  Description: Maybe with param T is an option type, which is a wrapper around a value that
  *  might be missing
  *  It represents either some value, or none
- *  Maybe<T> is an abstract class
+ *  Maybe with param T is an abstract class
  *  Attributes: NONE
- *  Nested Classes: None, Some<T>
+ *  Nested Classes: None, Some
  *  Factory Methods: none(), some(), of()
  *  Other Methods: protected get(), filter(), map(), flatMap(), orElse(), orElseGet()
  *
@@ -15,6 +15,7 @@
  */
 
 package cs2030.fp;
+
 import java.util.NoSuchElementException;
 
 public abstract class Maybe<T> {
@@ -157,7 +158,7 @@ public abstract class Maybe<T> {
     }
 
     @Override
-    public <U> Maybe<U> map(Transformer<Object,? extends U> trans) {
+    public <U> Maybe<U> map(Transformer<Object, ? extends U> trans) {
       return none(); //returns back None object
     }
 
