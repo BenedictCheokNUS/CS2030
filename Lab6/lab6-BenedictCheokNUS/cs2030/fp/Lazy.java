@@ -116,7 +116,7 @@ public class Lazy<T> {
    *
    */ 
   public T get() {
-    this.value = Maybe.of(this.value.<T>orElseGet(this.producer));
+    this.value = Maybe.<T>of(this.value.<T>orElseGet(this.producer));
     return this.value.orElse(null);
   }
 
