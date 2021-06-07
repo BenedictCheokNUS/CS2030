@@ -8,8 +8,8 @@ import java.util.List;
  * A wrapper around an lazily evaluated list that
  * can be generated with a lambda expression.
  *
- * @author Put Your Name (Your Group)
- * @version CS2030 AY 20/21 Special Term 1
+ * @author Benedict Cheok Wei En (B03), A0199433U
+ * @version CS2030 2020/21 ST1
  *
  */
 class LazyList<T> {

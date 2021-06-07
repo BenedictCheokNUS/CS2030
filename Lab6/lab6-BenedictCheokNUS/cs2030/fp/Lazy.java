@@ -8,19 +8,14 @@
  * It would only evaluate the value 
  * when needed, and evaluate it once only
  *
- * @param <T>       Type parameter T of Lazy class
- * Attributes:.
- * @param producer  Producer type, that stores a function
- *                  produce() to be activated when needed 
- *                  only
- * @param value     Maybe type, that wraps around a value
- *                  whether or not it is null. 
- *
- * Methods:
- *
+ * Type Parameter: T
+ * Attributes: producer, value
+ * Methods: Lazy(T value), Lazy(Producer s), of(T v), of(Producer s), 
+ * get(), toString(), map(Transformer trans), flatMap(Transformer trans),
+ * filter(BooleanCondition testCond), equals(Object n), combine(Lazy s, Combiner f)
  *
  * @author Benedict Cheok Wei En (B03), A0199433U
- *
+ * @version CS2030 2020/21 ST1
  */
 
 package cs2030.fp;
@@ -28,8 +23,18 @@ package cs2030.fp;
 public class Lazy<T> {
   
   //ATTRIBUTES
-  
+  /**
+   * Attribute/Field
+   * producer: Producer type that stores a function produce()
+   * to be activated when needed only
+   */ 
   private Producer<T> producer;
+
+  /**
+   * Attribute/Field
+   * value: Of Maybe type, that wraps around a value whether 
+   * or not it is null.
+   */ 
   private Maybe<T> value = Maybe.none();
 
   //CONSTRUCTOR METHOD
