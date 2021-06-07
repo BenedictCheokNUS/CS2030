@@ -148,7 +148,7 @@ public abstract class Maybe<T> {
       
     //OTHER METHODS for class None
     @Override
-    protected Exception get() throws NoSuchElementException {
+    protected Exception get() {
       throw new NoSuchElementException();
     }
     
