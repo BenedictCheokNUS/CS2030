@@ -121,8 +121,8 @@ public class Lazy<T> {
    *
    */ 
   public T get() {
-    this.value = Maybe.<T>of(this.value.<T>orElseGet(this.producer));
-    return this.value.orElse(null);
+    this.value = Maybe.some(this.value.orElseGet(() -> this.producer.produce()));
+    return this.value.orElseGet(this.producer);
   }
 
   /**
@@ -225,7 +225,7 @@ public class Lazy<T> {
       //Type of n is checked and verified to be of type Lazy
       //Therefore it is safe to cast
       @SuppressWarnings("unchecked")
-      Lazy<Object> compareWithat = (Lazy<Object>) n;
+      Lazy<?> compareWithat = (Lazy<?>) n;
       return this.get().equals(compareWithat.get());
     } else {
       return false;
