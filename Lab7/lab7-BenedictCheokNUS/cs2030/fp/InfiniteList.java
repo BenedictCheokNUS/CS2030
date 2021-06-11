@@ -11,10 +11,12 @@ import java.util.NoSuchElementException;
  * Description: 
  *
  * Attributes:
- *
+ * head, tail, EMPTY_LIST 
  *
  * Methods:
- *
+ * InfiniteList(), generate(), iterate(), InfiniteList(), InfiniteList(), 
+ * head(), tail(), map(), filter(), empty(), limit(), takeWhile(), isEmpty(), 
+ * reduce(), count(), toList(), toString()
  *
  * @author Benedict Cheok Wei En (B03), A0199433U
  * @version CS2030 2020/21 ST1
@@ -162,6 +164,29 @@ public class InfiniteList<T> {
     public InfiniteList<Object> takeWhile(BooleanCondition<Object> predicate) {
       return this; //empty list got nothing to take.
     }
+    
+    /**
+     * NESTED CLASS METHOD: reduce(identity, accumulator)
+     * This method will always return the identity argument of the reduce method.
+     *
+     * @return U              The method returns the identity argument of type U.
+     */ 
+    @Override
+    public <U> U reduce(U identity, Combiner<U, Object, U> accumulator) {
+      return identity;
+    }
+
+    /**
+     * NESTED CLASS METHOD: count()
+     * This method counts the number of elements in the list. 
+     * An empty list has 0 elements.
+     *
+     * @return long           The method will always return 0 for empty list.
+     */
+    @Override
+    public long count() {
+      return 0;
+    }
   }
 
   /**
@@ -307,8 +332,8 @@ public class InfiniteList<T> {
     //return new InfiniteList<>(newHead, () -> this.tail().filter(cond));
     
     //NEW METHOD:
-    Lazy<Maybe<T>> newHead = Lazy.of(() -> Maybe.some(this.head()).filter(predicate));
-    Lazy<InfiniteList<T>> newTail = Lazy.of(() -> this.tail().filter(predicate));
+    Lazy<Maybe<T>> newHead = Lazy.of(() -> this.head.get().filter(predicate));
+    Lazy<InfiniteList<T>> newTail = Lazy.of(() -> this.tail.get().filter(predicate));
     return new InfiniteList<T>(newHead, newTail);
   }
   
@@ -379,15 +404,39 @@ public class InfiniteList<T> {
   public boolean isEmpty() {
     return false;
   }
-
+  
+  /**
+   * METHOD: reduce(identity, accumulator)
+   * This method applies the lambda function accumulator repeatedly on the elements
+   * of the InfiniteList (finite) until it reduces the list to a single value.
+   * It is a terminal operation.
+   *
+   * @param <U>               The type variable of the output value
+   * @param identity          The variable to be combined with the element of 
+   *                          the list. It is updated by the result of the 
+   *                          combination of a current element with the identity.
+   * @param accumulator       The function to how to combine the identity with 
+   *                          with the current element.
+   * @return U                The method returns a single value. 
+   */
   public <U> U reduce(U identity, Combiner<U, ? super T, U> accumulator) {
-    // TODO
-    return null;
+    return this.tail().reduce(accumulator.combine(identity, this.head()), accumulator);
   }
 
+  /**
+   * METHOD: count()
+   * This method counts the number of elements in the list
+   * It is a terminal operation
+   *
+   * @return long             The method returns a long, indicating the number of
+   *                          elements in the list.
+   */
   public long count() {
-    // TODO
-    return 0;
+    if (this.head.get() == Maybe.none()) {
+      return this.tail.get().count(); //skip this one
+    } else {
+      return this.tail.get().count() + 1L;
+    } 
   }
   
   /**
