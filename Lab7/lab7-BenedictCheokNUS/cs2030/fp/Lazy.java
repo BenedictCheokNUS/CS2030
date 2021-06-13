@@ -121,8 +121,10 @@ public class Lazy<T> {
    *
    */ 
   public T get() {
-    this.value = Maybe.<T>of(this.value.<T>orElseGet(this.producer));
-    return this.value.orElse(null);
+    this.value = Maybe.some(this.value.orElseGet(() -> this.producer.produce()));
+    //The above creates an instance of class Maybe with this.value (if present)
+    //orElse, creates an instance of class Maube with the value produced by producer
+    return this.value.orElseGet(this.producer);
   }
 
   /**
@@ -195,7 +197,7 @@ public class Lazy<T> {
    * of type variable Boolean, which would be executed
    * when invoked.
    *
-   * @param testCond    The criteria to which the vontent of the
+   * @param testCond    The criteria to which the content of the
    *                    Lazy object is evaluated.
    * @return Lazy       It returns a Lazy object of type Boolean.
    *
@@ -215,7 +217,7 @@ public class Lazy<T> {
    * @param n           The object which the Lazy object is
    *                    being compared to.
    * @return boolean    It returns true if the contents are 
-   *                    equal to the argument to be compared to   *
+   *                    equal to the argument to be compared to   
    *
    */ 
   

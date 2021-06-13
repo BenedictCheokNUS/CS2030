@@ -92,7 +92,7 @@ public class InfiniteList<T> {
      * This method maps the empty list using a mapper. However, the empty list is 
      * empty and has no elements to map. Therefore it returns an empty list
      *
-     * @return InfiniteList   The method returns this EmptyList, which is a 
+     * @return EmptyList      The method returns this EmptyList, which is a 
      *                        subtype of InfiniteList
      */
     @Override
@@ -105,7 +105,7 @@ public class InfiniteList<T> {
      * This method filters the elements of the list. However the empty list
      * has no elements, and therefore the method returns an empty list.
      *
-     * @return InfiniteList   The method returns this EmptyList, which is a 
+     * @return EmptyList      The method returns this EmptyList, which is a 
      *                        subtype of InfiniteList.
      */
     @Override
@@ -129,7 +129,7 @@ public class InfiniteList<T> {
      * NESTED CLASS METHOD: limit(n)
      * The method returns the empty list as the empty list has no length.
      *
-     * @return InfiniteList   This method returns an empty list, which is a 
+     * @return EmptyList      This method returns an empty list, which is a 
      *                        a subtype of infinite list.
      */
     @Override
@@ -157,7 +157,7 @@ public class InfiniteList<T> {
      *
      * @param predicate       The test to check if the element of the list fulfils
      *                        it, else truncate list.
-     * @return InfiniteList   The method returns an empty list which is subtype of
+     * @return EmptyList      The method returns an empty list which is subtype of
      *                        infinite list.
      */
     @Override
@@ -432,11 +432,8 @@ public class InfiniteList<T> {
    *                          elements in the list.
    */
   public long count() {
-    if (this.head.get() == Maybe.none()) {
-      return this.tail.get().count(); //skip this one
-    } else {
-      return this.tail.get().count() + 1L;
-    } 
+    return (this.head.get() == Maybe.none()) ? 
+        this.tail.get().count() : (this.tail.get().count() + 1L);
   }
   
   /**
@@ -446,7 +443,7 @@ public class InfiniteList<T> {
    * @return List             The method returns a List with all the elements.
    */
   public List<T> toList() {
-    List<T> newList = new ArrayList<>();
+    List<T> newList = new ArrayList<>();    
     if (this.head.get() != Maybe.none()) {
       newList.add(this.head());
     }
