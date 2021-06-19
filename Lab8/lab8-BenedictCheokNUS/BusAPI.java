@@ -47,15 +47,9 @@ class BusAPI {
         .uri(URI.create(url))
         .build();
     CompletableFuture<HttpResponse<String>> response;
-    //HttpResponse<String> response;
 
-    //try {
     response = client.sendAsync(request, BodyHandlers.ofString()); 
-      //response = client.send(request, BodyHandlers.ofString());
-    //} catch (IOException | InterruptedException e) {
-    //  throw new CompletionException(e);
-    //}
-    
+   
     return response.<String>thenApply(x -> {
       if (x.statusCode() != 200) {
         System.out.println(x + " " + x.statusCode());
@@ -64,11 +58,6 @@ class BusAPI {
       return x.body();
     });
     
-    //if (response.statusCode() != 200) {
-    //System.out.println(response + " " + response.statusCode());
-    //  return "";
-    //}
-    //return response.body();
   }
 
   /**
@@ -79,7 +68,6 @@ class BusAPI {
    *     string if something go wrong.
    */ 
   public static CompletableFuture<String> getBusStopsServedBy(String serviceId) {
-  //public static String getBusStopsServedBy(String serviceId) {
     return httpGet(BUS_SERVICE_API + serviceId);
   }
 
@@ -91,7 +79,6 @@ class BusAPI {
    *     string if the API query failed.
    */
   public static CompletableFuture<String> getBusServicesAt(String stopId) {
-  //public static String getBusServicesAt(String stopId) {
     return httpGet(BUS_STOP_API + stopId);
   }
 }

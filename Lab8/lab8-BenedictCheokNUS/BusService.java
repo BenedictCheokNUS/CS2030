@@ -1,6 +1,7 @@
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 
@@ -28,15 +29,20 @@ class BusService {
    * if bus stops are not retrieved before.
    * @return A set of bus stops that this bus services serves.
    */
-  public Set<BusStop> getBusStops() {
-    Scanner sc = new Scanner(BusAPI.getBusStopsServedBy(serviceId));
-    Set<BusStop> stops = sc.useDelimiter("\n")
-        .tokens()
-        .map(line -> line.split(","))
-        .map(fields -> new BusStop(fields[0], fields[1]))
-        .collect(Collectors.toSet());
-    sc.close();
-    return stops;
+  public CompletableFuture<Set<BusStop>> getBusStops() {
+    
+    //getBusStopsServedBy() returns CompletableFuture<String>
+    CompletableFuture<Set<BusStop>> stops = BusAPI.getBusStopsServedBy(serviceId)
+        //CompletableFuture<String>
+        .<Scanner>thenApply(str -> new Scanner(str))
+        //CompletableFuture<Scanner>
+        .<Set<BusStop>>thenApply(sc -> sc
+            .useDelimiter("\n")
+            .tokens()
+            .map(line -> line.split(","))
+            .map(fields -> new BusStop(fields[0], fields[1]))
+            .collect(Collectors.toSet()));
+    return stops;    
   }
 
   /**
@@ -44,11 +50,15 @@ class BusService {
    * @param  name Name (possibly partial) of a bus stop.
    * @return A list of bus stops matching the given name.
    */
-  public Set<BusStop> findStopsWith(String name) {
-    return getBusStops()
-       .stream()
-       .filter(stop -> stop.matchName(name))
-       .collect(Collectors.toSet());
+  public CompletableFuture<Set<BusStop>> findStopsWith(String name) {
+    //getBusStops() return CompletableFuture<Set<BusStop>>
+    return getBusStops() 
+        //CompletableFuture<Set<BusStop>>
+        .thenApply(x -> x.stream()) 
+        //CompletableFuture<Stream<BusStop>>
+        .thenApply(x -> x.filter(stop -> stop.matchName(name))) 
+        //CompletableFuture<Stream<BusStop>>
+        .<Set<BusStop>>thenApply(x -> x.collect(Collectors.toSet())); 
   }
 
   /**
